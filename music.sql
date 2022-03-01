@@ -147,3 +147,50 @@ INSERT INTO guest_artists (guest_artist_id, song_id)
     (9, 16),
     (11, 17),
     (13, 18);
+
+----------- SHOW ALL SONG DATA -------------
+
+SELECT title, duration_in_seconds, release_date, artists.name, albums.album_name, guest_artist, producers_songs.name as producer
+  FROM (
+    SELECT a.name as guest_artist, g.song_id
+      FROM guest_artists g
+      JOIN artists a
+        ON g.guest_artist_id = a.id
+  ) guests
+  RIGHT JOIN songs
+    ON guests.song_id = songs.id
+  JOIN artists 
+    ON artist_id = artists.id
+  JOIN albums 
+    ON songs.album = albums.id
+  JOIN producers_songs
+    ON songs.id = producers_songs.song_id;
+
+
+-- SELECT title, duration_in_seconds, release_date, artists.name, albums.album_name, guest_artist, producers_songs.name as producer
+--   FROM (
+--     SELECT a.name as guest_artist, g.song_id
+--       FROM guest_artists g
+--       JOIN artists a
+--         ON g.guest_artist_id = a.id
+--   ) guests
+--   RIGHT JOIN songs
+--     ON guests.song_id = songs.id
+--   JOIN artists 
+--     ON artist_id = artists.id
+--   JOIN albums 
+--     ON songs.album = albums.id
+--   JOIN producers_songs
+--     ON songs.id = producers_songs.song_id
+--     GROUP BY title;
+
+-- (SELECT s.id, p.name as producer, COUNT(*)
+--   FROM songs s
+--     JOIN producers_songs p
+--     ON s.id = p.song_id
+--     GROUP BY s.id;
+--   ) guests
+
+-- SELECT song_id, name, COUNT(*)
+--   FROM producers_songs
+--   GROUP BY song_id;
